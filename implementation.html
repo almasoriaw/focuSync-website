@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>focuSync - Technical Implementation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="focuSync Logo" class="logo">
+                <h1>focuSync</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="science.html">The Science</a></li>
+                    <li><a href="methodology.html">Methodology</a></li>
+                    <li><a href="implementation.html" class="active">Implementation</a></li>
+                    <li><a href="ethics.html">Ethics</a></li>
+                    <li><a href="references.html">References</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Technical Implementation</h2>
+            <p>How focuSync works under the hood</p>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <div class="container">
+            <h2>System Architecture</h2>
+            <p>The focuSync system follows a modular pipeline architecture:</p>
+            
+            <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 30px 0; text-align: center;">
+                <p style="font-family: monospace; font-size: 1rem; line-height: 1.4;">
+                Video Input → OpenFace 3.0 Feature Extraction → Sequential Data Processing → LSTM Model → Focus State Prediction → Annotated Output
+                </p>
+            </div>
+            
+            <h2>OpenFace 3.0 Integration</h2>
+            <p>We leverage OpenFace 3.0 for sophisticated facial analysis:</p>
+            <ul>
+                <li>Facial landmark detection (68 points)</li>
+                <li>Action Unit (AU) intensity estimation</li>
+                <li>Head pose estimation</li>
+                <li>Gaze direction tracking</li>
+            </ul>
+            
+            <h3>Feature Extraction Implementation</h3>
+            <p>The head pose estimation function demonstrates how we extract 3D orientation features:</p>
+            
+            <pre style="background-color: #f8f8f8; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 20px 0; font-family: monospace; font-size: 0.9rem; line-height: 1.4;">
+def estimate_head_pose(landmarks, image_shape):
+    import numpy as np
+    import cv2
+
+    model_points = np.array([
+        (0.0, 0.0, 0.0),             # Nose tip
+        (0.0, -330.0, -65.0),        # Chin
+        (-225.0, 170.0, -135.0),     # Left eye left corner
+        (225.0, 170.0, -135.0),      # Right eye right corner
+        (-150.0, -150.0, -125.0),    # Left mouth corner
+        (150.0, -150.0, -125.0)      # Right mouth corner
+    ])
+    image_points = np.array(landmarks, dtype="double")
+    focal_length = image_shape[1]
+    center = (image_shape[1] / 2, image_shape[0] / 2)
+    camera_matrix = np.array([
+        [focal_length, 0, center[0]],
+        [0, focal_length, center[1]],
+        [0, 0, 1]
+    ], dtype="double")
+    dist_coeffs = np.zeros((4, 1))
+    success, rot_vec, trans_vec = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs)
+    rotation_matrix, _ = cv2.Rodrigues(rot_vec)
+    proj_matrix = np.hstack((rotation_matrix, trans_vec))
+    _, _, _, _, _, _, euler_angles = cv2.decomposeProjectionMatrix(proj_matrix)
+    pitch, yaw, roll = [angle[0] for angle in euler_angles]
+    return pitch, yaw, roll
+</pre>
+            
+            <h2>LSTM Model Architecture</h2>
+            <p>Our deep learning model is implemented in PyTorch:</p>
+            
+            <pre style="background-color: #f8f8f8; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 20px 0; font-family: monospace; font-size: 0.9rem; line-height: 1.4;">
+class LSTM(nn.Module):
+    def __init__(self, input_dim, output_dim, hidden_dim=256, layer_dim=2, dropout=0.2):
+        super(LSTM, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.layer_dim = layer_dim
+        self.lstm = nn.LSTM(input_dim, hidden_dim, layer_dim, batch_first=True, dropout=dropout)
+        self.fc = nn.Linear(hidden_dim, output_dim)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        h0 = torch.zeros(self.layer_dim, x.size(0), self.hidden_dim).to(x.device)
+        c0 = torch.zeros(self.layer_dim, x.size(0), self.hidden_dim).to(x.device)
+        out, _ = self.lstm(x, (h0, c0))
+        out = self.fc(out[:, -1, :])
+        out = self.sigmoid(out)
+        return out</pre>
+            
+            <h2>Processing Pipeline</h2>
+            <p>The full processing pipeline consists of:</p>
+            
+            <ol>
+                <li><strong>Video Processing</strong> - Frame extraction and preparation</li>
+                <li><strong>Feature Extraction</strong> - Using OpenFace 3.0 to extract facial features</li>
+                <li><strong>Sequence Creation</strong> - Building temporal sequences for LSTM input</li>
+                <li><strong>Focus Classification</strong> - Applying the trained model to detect focus states</li>
+                <li><strong>Output Annotation</strong> - Visualizing results on the original video</li>
+            </ol>
+            
+            <h3>Implementation Environment</h3>
+            <p>Our system is implemented in:</p>
+            <ul>
+                <li>Python 3.8+</li>
+                <li>PyTorch for deep learning components</li>
+                <li>OpenCV for image processing</li>
+                <li>OpenFace 3.0 for facial analysis</li>
+                <li>Google Colab for accessible deployment</li>
+            </ul>
+            
+            <h2>Model Weights and Distribution</h2>
+            <p>Pre-trained model weights are distributed via Google Drive:</p>
+            <pre style="background-color: #f8f8f8; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 20px 0; font-family: monospace; font-size: 0.9rem; line-height: 1.4;">
+# Download model weights
+!gdown --id 116KIwkuej_Mazgs6Xa860p4TbrqQe_9S -O lstm_focus_classifier_as.pt
+!gdown --folder https://drive.google.com/drive/folders/1aBEol-zG_blHSavKFVBH9dzc9U9eJ92p -O /content/openface_weights</pre>
+            
+            <h2>Real-Time Processing</h2>
+            <p>The system is optimized for efficient processing:</p>
+            <ul>
+                <li>Batched frame processing for video analysis</li>
+                <li>Optimized feature extraction pipeline</li>
+                <li>Efficient LSTM implementation for temporal analysis</li>
+                <li>Frame-by-frame annotation with minimal latency</li>
+            </ul>
+            
+            <h2>System Demonstration</h2>
+            <div class="demo-container">
+                <!-- Add your implementation demo GIFs here -->
+                <div class="demo-item large-demo">
+                    <div class="demo-placeholder">
+                        <img src="assets/frontend.gif" alt="focuSync Implementation Demo">
+                    </div>
+                    <p>Complete pipeline demonstration showing OpenFace analysis and LSTM prediction</p>
+                </div>
+            </div>
+            
+            <p>This implementation combines academic research with practical engineering to create a robust focus detection system with real-world applications.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 focuSync Project. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

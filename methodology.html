@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>focuSync - Our Methodology</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="focuSync Logo" class="logo">
+                <h1>focuSync</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="science.html">The Science</a></li>
+                    <li><a href="methodology.html" class="active">Methodology</a></li>
+                    <li><a href="implementation.html">Implementation</a></li>
+                    <li><a href="ethics.html">Ethics</a></li>
+                    <li><a href="references.html">References</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Our Methodology</h2>
+            <p>How we developed the focuSync system from research to implementation</p>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <div class="container">
+            <h2>Feature Extraction</h2>
+            <p>Our approach leverages OpenFace 3.0, a state-of-the-art facial behavior analysis toolkit, to extract key features that correlate with focus states:</p>
+            
+            <h3>Selected Action Units (AUs)</h3>
+            <p>Based on our research, we identified 8 critical Action Units that OpenFace 3.0 can reliably detect:</p>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 30px 0;">
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU1 – Inner Brow Raiser</h4>
+                    <p>Correlates with focus and challenge states</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU2 – Outer Brow Raiser</h4>
+                    <p>Correlates with focus and rote states</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU4 – Brow Lowerer</h4>
+                    <p>Often associated with concentration</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU6 – Cheek Raiser</h4>
+                    <p>Part of genuine engagement expression</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU9 – Nose Wrinkler</h4>
+                    <p>Can indicate intense concentration</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU12 – Lip Corner Puller</h4>
+                    <p>Associated with focus states</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU25 – Lips Part</h4>
+                    <p>Positively correlated with engagement</p>
+                </div>
+                <div style="flex: 1; min-width: 250px; background: #f5f5f5; padding: 20px; border-radius: 8px;">
+                    <h4>AU26 – Jaw Drop</h4>
+                    <p>Can indicate surprise or intense attention</p>
+                </div>
+            </div>
+            
+            <h3>Head Pose Estimation</h3>
+            <p>In addition to facial expressions, we track head position and orientation using solvePnP for projective geometry calculations:</p>
+            <ul>
+                <li><strong>Pitch</strong> - Vertical head angle, correlates negatively with engagement and challenge</li>
+                <li><strong>Yaw</strong> - Horizontal head rotation, indicates attention direction</li>
+                <li><strong>Roll</strong> - Head tilt, provides additional context for attention state</li>
+            </ul>
+            
+            <h3>Gaze Analysis</h3>
+            <p>Eye gaze direction and movement patterns provide critical information about attention focus:</p>
+            <ul>
+                <li>Gaze angle - Negatively correlates with engagement</li>
+                <li>Fixation duration - Longer fixations typically indicate deeper processing</li>
+                <li>Saccade patterns - Rapid eye movements between points of interest</li>
+            </ul>
+            
+            <h2>Model Development</h2>
+            <p>To capture the temporal nature of focus, we developed a Long Short-Term Memory (LSTM) neural network architecture:</p>
+            
+            <h3>LSTM Architecture</h3>
+            <p>Our model consists of:</p>
+            <ul>
+                <li>Input dimension matching extracted facial features</li>
+                <li>Hidden dimension of 256 units</li>
+                <li>2 LSTM layers with dropout (0.2) for regularization</li>
+                <li>Sigmoid output activation for binary focus classification</li>
+            </ul>
+            
+            <h3>Training Process</h3>
+            <p>The model was trained on sequences of facial features extracted from videos that were hand-labeled for focus states:</p>
+            <ol>
+                <li>Extract features from video frames using OpenFace 3.0</li>
+                <li>Create sequences of features using sliding windows</li>
+                <li>Train LSTM on these sequences with binary focus labels</li>
+                <li>Validate using cross-validation to prevent overfitting</li>
+                <li>Test on held-out videos to measure generalization</li>
+            </ol>
+            
+            <h3>Dataset Creation</h3>
+            <p>Our dataset was carefully curated to ensure scientific validity:</p>
+            <ul>
+                <li>Videos were manually labeled based on the scientific definition of focus (high engagement and challenge)</li>
+                <li>Labels were validated using established attention assessment protocols</li>
+                <li>Multiple reviewers assessed each video to reduce subjective bias</li>
+                <li>Dataset covers diverse conditions and participants to ensure generalizability</li>
+            </ul>
+            
+            <h2>Performance Metrics</h2>
+            <p>Our model achieves outstanding performance metrics:</p>
+            <ul>
+                <li><strong>Accuracy:</strong> 98% on our test dataset</li>
+                <li><strong>Precision:</strong> Minimized false positives in focus detection</li>
+                <li><strong>Recall:</strong> Reliable identification of true focus states</li>
+                <li><strong>Temporal Consistency:</strong> Stable predictions across time sequences</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 focuSync Project. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
