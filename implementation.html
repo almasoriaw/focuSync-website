@@ -129,14 +129,7 @@ class LSTM(nn.Module):
                 <li>Google Colab for accessible deployment</li>
             </ul>
             
-            <h2>Model Weights and Distribution</h2>
-            <p>Pre-trained model weights are distributed via Google Drive:</p>
-            <pre style="background-color: #f8f8f8; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 20px 0; font-family: monospace; font-size: 0.9rem; line-height: 1.4;">
-# Download model weights
-!gdown --id 116KIwkuej_Mazgs6Xa860p4TbrqQe_9S -O lstm_focus_classifier_as.pt
-!gdown --folder https://drive.google.com/drive/folders/1aBEol-zG_blHSavKFVBH9dzc9U9eJ92p -O /content/openface_weights</pre>
-            
-            <h2>Real-Time Processing</h2>
+            <h2>Efficient Frame-by-Frame Processing</h2>
             <p>The system is optimized for efficient processing:</p>
             <ul>
                 <li>Batched frame processing for video analysis</li>
@@ -144,6 +137,7 @@ class LSTM(nn.Module):
                 <li>Efficient LSTM implementation for temporal analysis</li>
                 <li>Frame-by-frame annotation with minimal latency</li>
             </ul>
+            <p><i>Note: While the current setup processes pre-recorded videos, future phases aim to support real-time streaming applications.</i></p>
             
             <h2>System Demonstration</h2>
             <div class="demo-container">
