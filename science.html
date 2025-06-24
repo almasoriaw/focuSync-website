@@ -29,39 +29,22 @@
     <section class="hero">
         <div class="container">
             <h2>The Science Behind Focus</h2>
-            <p>How neuroplasticity research and eye tracking inform our focus detection system</p>
+            <p>Facial and gaze-based attention detection in real-world knowledge work</p>
         </div>
     </section>
 
     <section class="page-content">
         <div class="container">
-            <h2>Neuroplasticity Framework</h2>
-            <p>Our approach is grounded in cutting-edge neuroplasticity research, particularly drawing from Dr. Andrew Huberman's work on attention and learning readiness. Key concepts include:</p>
-            
-            <ul>
-                <li><strong>Neurochemical Gating</strong> - Focus creates a neurochemical environment that enables learning. When focused, our brains release epinephrine, acetylcholine, and dopamine that prepare neural circuits for change.</li>
-                <li><strong>Visual Attention and Acetylcholine</strong> - Sustained visual attention triggers acetylcholine release, a key neurotransmitter for neural plasticity.</li>
-                <li><strong>EEG Markers of Focus</strong> - Gamma (30-50 Hz) and Alpha (8-13 Hz) rhythms serve as indicators of focus and learning readiness.</li>
-                <li><strong>Sustained Focus</strong> - Neuroplasticity requires sustained periods of focus (typically 90 minutes), followed by breaks, aligning with ultradian cycles.</li>
-            </ul>
-            
-            <h2>Facial Markers of Focus</h2>
-            <p>Based on research by Mark et al., we define focus states along two dimensions:</p>
-            
-            <ul>
-                <li><strong>Engagement</strong> - Level of participation and attention</li>
-                <li><strong>Challenge</strong> - Level of cognitive difficulty experienced</li>
-            </ul>
-            
-            <p>Focus is defined as the state where a person is both highly engaged and challenged, creating optimal conditions for learning and neuroplasticity.</p>
-            
-            <h2>Action Units and Focus States</h2>
-            <p>Our research identified specific facial Action Units (AUs) that correlate with focus states:</p>
-            
+            <h2>Behavioral Model of Focus</h2>
+            <p>Our system builds on empirical findings from the CHI 2020 study <em>Faces of Focus</em>, which investigated how facial expressions and gaze patterns correlate with self-reported attentional states among researchers in naturalistic settings. Using a framework by Mark et al., focus is defined as a state where users are both <strong>highly engaged</strong> and <strong>experiencing cognitive challenge</strong>.</p>
+
+            <h2>Facial Markers of Attention</h2>
+            <p>OpenFace 3.0 allows us to extract key behavioral cues in real time. The following Action Units (AUs) and facial metrics are significantly associated with attention states:</p>
+
             <table style="width:100%; border-collapse: collapse; margin: 30px 0;">
                 <tr style="background-color: #2c5aa0; color: white;">
                     <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Focus State</th>
-                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Associated Action Units</th>
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Associated Facial Cues</th>
                     <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Correlation</th>
                 </tr>
                 <tr>
@@ -71,7 +54,7 @@
                 </tr>
                 <tr>
                     <td style="padding: 12px; border: 1px solid #ddd;">Engagement</td>
-                    <td style="padding: 12px; border: 1px solid #ddd;">Gaze Angle, Pitch, AU14 (Dimpler)</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">Pitch (head tilt), Gaze Angle, AU14 (Dimpler)</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">Negative</td>
                 </tr>
                 <tr>
@@ -81,29 +64,26 @@
                 </tr>
                 <tr>
                     <td style="padding: 12px; border: 1px solid #ddd;">Challenge</td>
-                    <td style="padding: 12px; border: 1px solid #ddd;">Gaze Angle Direction, Pitch, AU28 (Lip Suck)</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">Gaze Angle Movement, AU28 (Lip Suck)</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">Negative</td>
                 </tr>
                 <tr>
-                    <td style="padding: 12px; border: 1px solid #ddd;">Focus</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">Focus (High Engagement & Challenge)</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">AU1 (Inner Brow Raiser), AU2 (Outer Brow Raiser), AU12 (Lip Corner Puller), AU20 (Lip Stretcher)</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">Significant Effect</td>
                 </tr>
             </table>
-            
-            <h2>Eye Movement Features</h2>
-            <p>Based on research by Heba et al., we analyze an extensive set of eye movement features from three types of eye movement events:</p>
-            
+
+            <h2>Gaze & Head Pose</h2>
+            <p>Focus is also indicated by consistent gaze direction, reduced gaze shifts, and changes in head pose. For example:</p>
             <ul>
-                <li><strong>Fixations</strong> - When the eye remains relatively still</li>
-                <li><strong>Saccades</strong> - Rapid eye movements between fixation points</li>
-                <li><strong>Post-Saccadic Oscillations</strong> - Small movements following saccades</li>
+                <li>Focused users tend to show lower average pitch (less head movement) and more screen-oriented gaze.</li>
+                <li>Challenged users display fewer saccadic gaze shifts and longer fixations, indicating deeper information processing.</li>
+                <li>Head distance and posture (Z-axis) also vary between rote and focused states.</li>
             </ul>
-            
-            <p>These features provide temporal, positional, and dynamic characteristics of eye movements that correlate with attentional states.</p>
-            
-            <h2>Integration of Research</h2>
-            <p>By combining neuroplasticity theory with specific facial and eye movement markers, our system creates a comprehensive framework for detecting focus states that is grounded in neuroscience and validated through empirical research.</p>
+
+            <h2>Our Contribution</h2>
+            <p>focuSync integrates these validated facial and gaze indicators into a lightweight attention detection framework. Unlike EEG-based systems or apps that only block distractions, our approach is fully vision-based and can run in everyday settings using just a webcam. This makes real-time focus tracking more accessible and scalable.</p>
         </div>
     </section>
 
